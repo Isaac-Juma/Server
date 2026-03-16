@@ -1,0 +1,35 @@
+# Dependencies
+node_modules
+package-lock.json
+yarn.lock
+
+# Environment variables (NEVER push these!)
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+*.log*
+
+# Build output
+dist/
+build/
+
+# ngrok session files
+.ngrok*
