@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema(
       select: false, // Don't return password by default
     },
 
-    // Game Profile
+    // Game Profile Picture for the Dashboard
     level: {
       type: Number,
       default: 1,
@@ -50,12 +50,11 @@ const userSchema = new mongoose.Schema(
     },
 
     // Auth roles
-    roles: {
-      type: String,
-      default: Basic,
-      required: true
+    // roles: {
+    //   type: String,
+    //   required: true
 
-    },
+    // },
 
     // Account Status
     isActive: {

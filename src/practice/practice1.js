@@ -27,7 +27,12 @@ const protectedGoals = () => {
 
 const myArray = protectedGoals();
 myArray.add('Love');
-myArray.delete(5, 1);
+myArray.getAll();
+console.log(myArray.getAll())
+const name = false;
 
-console.log(myArray.getAll('Isaac'))
+function test () {
+    let name = [2, 4, 5, 6, 43, 32, 5];
+
+}
 
