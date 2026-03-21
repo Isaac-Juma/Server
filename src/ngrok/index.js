@@ -16,13 +16,13 @@ export const startNgrok = async (port) => {
     let url;
     if (typeof response.url === 'function') {
       url = response.url();
-    } else if (typeof response === 'string') {
-      url = response;
-    } else if (response?.url) {
-      url = response.url;
-    } else {
-      url = String(response);
-    }
+     } else if (typeof response === 'string') {
+       url = response;
+    // } else if (response?.url) {
+    //   url = response.url;
+    // } else {
+    //   url = String(response);
+     }
     
     console.log(`\n🌐 ngrok tunnel opened at: ${url}`);
     return url;

@@ -54,12 +54,12 @@ app.use(`${config.apiPrefix}/users`, userRoutes);
  */
 
 // Serve static files from public folder (built Vue app)
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../Public')));
 
 // SPA fallback - serve index.html for all non-API routes
 // This allows Vue Router to handle all routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(__dirname, '../public/assets/'));
 });
 
 // 404 Handler - catch undefined routes (API only, since SPA routes are handled above)
