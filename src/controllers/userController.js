@@ -3,8 +3,24 @@ import User from '../models/User.js';
 import userGoals from '../models/userGoals.js';
 
 /**
- * Create a way to store the usersData to the Db
+ * Create a way to store the usersProfile to the Db
  */
+export const getUserProfile = async (req, res, next) => {
+  try {
+    const {User_Id} = req.body;
+    const userProfile = await User.findById({user_Id: 34});
+    res.status(201).json({
+      success: true,
+      message: 'Your profile has been updated',
+      data:UserProfile,
+    })
+  }
+  catch (error) {
+    next(error)
+
+  }
+
+};
 
 // Post to a document in the userGoals collection with the provided data
 export const createUserGoals = async (req, res, next) => {

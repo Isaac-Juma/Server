@@ -5,6 +5,12 @@ import mongoose from 'mongoose';
  */
 const userSchema = new mongoose.Schema(
   {
+    // User ID
+    userId: {
+      type: Number,
+
+    },
+
     // Basic Information
     username: {
       type: String,
@@ -30,6 +36,20 @@ const userSchema = new mongoose.Schema(
       select: false, // Don't return password by default
     },
 
+    // User Profile
+    avatarUrl: {
+      type: String,
+      required: false,
+
+    },
+
+    // Player Position 
+    position: {
+      type: Number,
+      default: 100
+
+    },
+
     // Game Profile Picture for the Dashboard
     level: {
       type: Number,
@@ -43,18 +63,18 @@ const userSchema = new mongoose.Schema(
       min: 0,
     },
 
-    highScore: {
+    points: {
       type: Number,
       default: 0,
       min: 0,
     },
 
     // Auth roles
-    // roles: {
-    //   type: String,
-    //   required: true
+    roles: {
+      type: String,
+      required: false
 
-    // },
+    },
 
     // Account Status
     isActive: {
