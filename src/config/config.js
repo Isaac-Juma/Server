@@ -15,6 +15,10 @@ export const config = {
   apiPrefix: process.env.API_PREFIX || '/api',
   logLevel: process.env.LOG_LEVEL || 'info',
 
+  // JWT Secret for token generation and verification
+  jwtSecret: process.env.JWT_SECRET, // Must be set in .env for production
+
+
   // ngrok - for exposing local server to the internet
   useNgrok: process.env.USE_NGROK === 'true',
   ngrokAuthToken: process.env.NGROK_AUTHTOKEN || null,

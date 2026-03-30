@@ -19,6 +19,27 @@ const router = express.Router();
  * ═══════════════════════════════════════════════════════════
  */
 
+router.get('/Users', authMiddleware, getUserById); // Example of protected route using authMiddleware
+
+
+
+
+router.put('/Users/:id', authMiddleware, updateUser); // Example of protected route using authMiddleware
+
+
+
+
+/**
+ * routes for Post('/auth/register', authenticateUser)
+ */
+
+
+
+
+
+
+
+
 /**
  * User Goals Endpoint
  * POST /api/usergoals

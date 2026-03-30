@@ -3,6 +3,40 @@ import User from '../models/User.js';
 import userGoals from '../models/userGoals.js';
 
 /**
+ * register User Flow 
+ */
+
+
+
+/**
+ * authenticate User Flow
+ */
+
+
+
+
+
+
+
+
+
+/**
+ * login flow 
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+
+
+
+
+
+
+
+
+
+/**
  * Create a way to store the usersProfile to the Db
  */
 export const getUserProfile = async (req, res, next) => {
