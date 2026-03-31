@@ -1,5 +1,13 @@
 import express from 'express';
+import { authMiddleware } from '../middleware/authMiddleware.js';
+import {
+  authenticateUser,
+  loginUser,
+  UserProfile
+} from '../controllers/userController.js';
+
 // Routes Communicate with User Controller to Handle Requests
+
 import {
   getAllUsers,
   getUserById,
@@ -19,39 +27,39 @@ const router = express.Router();
  * ═══════════════════════════════════════════════════════════
  */
 
+/**
+ * API URL LIST:
+ * Defines endpoints for user-related ops like reg/login, profile management.
+ * should use auth check for protected routes (profile, update, delete)
+ * 
+ */
+router.post('/register', (req, res) => {
+  res.send('Register route');
+});
+
+// Protected route using authMiddleware to ensure only authenticated users can access it
+router.post('/authenticate', authenticateUser, loginUser); // Authenticate user and return JWT token
+
 router.get('/Users', authMiddleware, getUserById); // Example of protected route using authMiddleware
 
-
-
+router.get('/profile', authMiddleware, UserProfile); // Protected route to get user profile after authentication
 
 router.put('/Users/:id', authMiddleware, updateUser); // Example of protected route using authMiddleware
 
-
-
-
-/**
- * routes for Post('/auth/register', authenticateUser)
- */
-
-
-
-
-
-
-
+router.delete('/Users/:id', authMiddleware, deleteUser); 
 
 /**
  * User Goals Endpoint
  * POST /api/usergoals
  * 
- */
+*/
 router.post('/usergoals', createUserGoals);
 
 
 /**
  * Get all users
  * GET /api/users
- */
+*/
 router.get('/', getAllUsers);
 
 /**

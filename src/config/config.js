@@ -29,6 +29,13 @@ export const config = {
   },
 };
 
+// Note: In production, ensure that JWT_SECRET is set to a strong, unique value and is not exposed in version control.
+if (!process.env.JWT_SECRET) {
+  console.warn('warning: JWT_SECRET is not set. Authentication will not work properly. Set JWT_SECRET in your environment variables.');
+  
+}
+
+
 // Validate configuration
 if (!config.isValidPort(config.port)) {
   throw new Error(`Invalid PORT: ${config.port}. Must be between 1 and 65535`);

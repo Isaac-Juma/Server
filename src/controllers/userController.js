@@ -1,45 +1,73 @@
 // User Controller Comunicates with Model to Handles Requests
 import User from '../models/User.js';
 import userGoals from '../models/userGoals.js';
+import { generateToken } from '../Auth/auth.js';
+
+/**
+ * Action logic for user-related ops like: if user login do this, if user reg do this.
+ * if user says get my profile, do this, etc.
+ */
 
 /**
  * register User Flow 
+ * with authentication and validation
  */
-
-
 
 /**
  * authenticate User Flow
  */
+const authenticateUser = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
 
-
-
-
-
-
-
-
+    // Validation
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email and password are required',
+      })
+    }
+  }
+  catch (error) {
+    next(error);
+  }
+};
 
 /**
- * login flow 
- * 
+ * login flow with authentication and validation
+ * generates a JWT token for the user upon successful login, which can be used for subsequent authenticated requests.
  * @param {*} req 
  * @param {*} res 
  * @param {*} next 
  */
+export const loginUser = async (req, res, next) => {
+  try {
+    // validation
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email and password are required',
+      })
+    }
+    const token = generateToken(req.user);
+    res.status(200).json({
+      success: true,
+      message: 'Login successful',
+      token,
+    })
 
-
-
-
-
-
-
-
+  }
+  catch (error) {
+    next(error);
+  }
+};
 
 /**
+ * Get User Profile after authentication
+ * Get /api/users/profile
  * Create a way to store the usersProfile to the Db
  */
-export const getUserProfile = async (req, res, next) => {
+export const UserProfile = async (req, res, next) => {
   try {
     const {User_Id} = req.body;
     const userProfile = await User.findById({user_Id: 34});
@@ -53,7 +81,6 @@ export const getUserProfile = async (req, res, next) => {
     next(error)
 
   }
-
 };
 
 // Post to a document in the userGoals collection with the provided data

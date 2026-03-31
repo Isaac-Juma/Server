@@ -46,6 +46,9 @@ app.use(config.apiPrefix, apiRoutes);
 
 // Users API routes
 app.use(`${config.apiPrefix}/users`, userRoutes);
+app.use(`/api/auth`, userRoutes); // For auth routes like register/login
+app.use(`/api/users`, userRoutes); // For user-related routes like get/update user
+
 
 /**
  * ═══════════════════════════════════════════════════════════

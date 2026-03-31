@@ -9,6 +9,16 @@ const router = express.Router();
 */
 
 /**
+ * Login Endpoint
+ * Post /api/auth/login
+ * Accepts email and password, returns JWT token if successful
+ * This will be used by the frontend to authenticate users and protect routes that require authentication. 
+ * The token will be stored in localStorage on the frontend and sent in the Authorization header for protected API requests.
+ * 
+ */
+router.post('/auth/login', )
+
+/**
  * SetGoals  Endpoint
  * GET /api/SetGoals
  */
