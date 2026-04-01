@@ -1,7 +1,6 @@
 import express from 'express';
-import { authMiddleware } from '../middleware/authMiddleware.js';
+import { authenticateToken } from '../middleware/authMiddleware.js';
 import {
-  authenticateUser,
   loginUser,
   UserProfile
 } from '../controllers/userController.js';
@@ -33,20 +32,18 @@ const router = express.Router();
  * should use auth check for protected routes (profile, update, delete)
  * 
  */
-router.post('/register', (req, res) => {
-  res.send('Register route');
-});
 
 // Protected route using authMiddleware to ensure only authenticated users can access it
-router.post('/authenticate', authenticateUser, loginUser); // Authenticate user and return JWT token
 
-router.get('/Users', authMiddleware, getUserById); // Example of protected route using authMiddleware
+router.post('/login', loginUser)
 
-router.get('/profile', authMiddleware, UserProfile); // Protected route to get user profile after authentication
+router.get('/Users', authenticateToken, getUserById); // Example of protected route using authenticateToken
 
-router.put('/Users/:id', authMiddleware, updateUser); // Example of protected route using authMiddleware
+router.get('/profile', authenticateToken, UserProfile); // Protected route to get user profile after authentication
 
-router.delete('/Users/:id', authMiddleware, deleteUser); 
+router.put('/Users/:id', authenticateToken, updateUser); // Example of protected route using authenticateToken
+
+router.delete('/Users/:id', authenticateToken, deleteUser); 
 
 /**
  * User Goals Endpoint

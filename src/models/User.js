@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 /**
  * User Schema - defines the structure of user documents in MongoDB
@@ -106,9 +107,12 @@ const userSchema = new mongoose.Schema(
 );
 
 /**
- * Update the updatedAt timestamp before saving
+ * Hash password and set updatedAt before save
  */
-userSchema.pre('save', function (next) {
+userSchema.pre('save', async function (next) {
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
   this.updatedAt = Date.now();
   next();
 });

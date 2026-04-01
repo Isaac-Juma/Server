@@ -10,6 +10,7 @@ import { connectDatabase, disconnectDatabase } from './config/database.js';
 import apiRoutes from './routes/api.js';
 import userRoutes from './routes/users.js';
 import { startNgrok, stopNgrok } from './ngrok/index.js';
+import { authenticateToken } from './middleware/authMiddleware.js';
 
 // Calculate __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -35,6 +36,10 @@ app.use(express.json());
 
 // URL Encoded - parse form data
 app.use(express.urlencoded({ extended: true }));
+
+// use authentication middleware for protected routes
+
+app.use('/api/users', authenticateToken);
 
 /**
  * ═══════════════════════════════════════════════════════════

@@ -1,4 +1,6 @@
 // User Controller Comunicates with Model to Handles Requests
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import userGoals from '../models/userGoals.js';
 import { generateToken } from '../Auth/auth.js';
@@ -8,30 +10,10 @@ import { generateToken } from '../Auth/auth.js';
  * if user says get my profile, do this, etc.
  */
 
-/**
- * register User Flow 
- * with authentication and validation
- */
 
-/**
- * authenticate User Flow
- */
-const authenticateUser = async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
 
-    // Validation
-    if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: 'Email and password are required',
-      })
-    }
-  }
-  catch (error) {
-    next(error);
-  }
-};
+
+
 
 /**
  * login flow with authentication and validation
@@ -42,22 +24,47 @@ const authenticateUser = async (req, res, next) => {
  */
 export const loginUser = async (req, res, next) => {
   try {
-    // validation
+    const { email, password } = req.body;
+
     if (!email || !password) {
       return res.status(400).json({
         success: false,
         message: 'Email and password are required',
-      })
+      });
     }
-    const token = generateToken(req.user);
+
+    const user = await User.findOne({ email }).select('+password');
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password',
+      });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password',
+      });
+    }
+
+    const token = generateToken(user);
+
     res.status(200).json({
       success: true,
       message: 'Login successful',
       token,
-    })
-
-  }
-  catch (error) {
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        level: user.level,
+        experience: user.experience,
+      },
+    });
+  } catch (error) {
     next(error);
   }
 };
@@ -69,17 +76,31 @@ export const loginUser = async (req, res, next) => {
  */
 export const UserProfile = async (req, res, next) => {
   try {
-    const {User_Id} = req.body;
-    const userProfile = await User.findById({user_Id: 34});
-    res.status(201).json({
-      success: true,
-      message: 'Your profile has been updated',
-      data:UserProfile,
-    })
-  }
-  catch (error) {
-    next(error)
+    const userId = req.user?.id;
 
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized. No user ID in token.',
+      });
+    }
+
+    const userProfile = await User.findById(userId).select('-password');
+
+    if (!userProfile) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'User profile retrieved successfully',
+      data: userProfile,
+    });
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -180,14 +201,18 @@ export const getLeveledLeaderboard = async (req, res, next) => {
  * Get all users (excluding passwords)
  * GET /api/users
  */
-export const getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res, next) => {
   try {
-    const { getAllUsers } = req.params;
-    const Users = await User.find({Users})
+    const users = await User.find().select('-password');
+    res.status(200).json({
+      success: true,
+      count: users.length,
+      data: users,
+    });
   } catch (error) {
-    
+    next(error);
   }
-}
+};
 
 
 /**
@@ -221,13 +246,9 @@ export const getUserById = async (req, res, next) => {
  * POST /api/users
  */
 export const createUser = async (req, res, next) => {
-
   try {
     const { username, email, password } = req.body;
-    const newUser = await User.create({ username, email, password });
-    
 
-    // Validation
     if (!username || !email || !password) {
       return res.status(400).json({
         success: false,
@@ -235,7 +256,6 @@ export const createUser = async (req, res, next) => {
       });
     }
 
-    // Check if user already exists
     const existingUser = await User.findOne({
       $or: [{ username }, { email }],
     });
@@ -245,11 +265,24 @@ export const createUser = async (req, res, next) => {
         success: false,
         message: 'Username or email already exists',
       });
-    };
+    }
 
-    // Don't return password
-    const userResponse = newUser.toObject();
-    delete userResponse.password;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await User.create({
+      username,
+      email,
+      password: hashedPassword,
+    });
+
+    const userResponse = {
+      id: newUser._id,
+      username: newUser.username,
+      email: newUser.email,
+      level: newUser.level,
+      experience: newUser.experience,
+      highScore: newUser.highScore,
+    };
 
     res.status(201).json({
       success: true,
