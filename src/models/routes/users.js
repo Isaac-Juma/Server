@@ -1,9 +1,9 @@
 import express from 'express';
-import { authenticateToken } from '../middleware/authMiddleware.js';
+import { authenticateToken } from '../../middleware/authMiddleware.js';
 import {
   loginUser,
   UserProfile
-} from '../controllers/userController.js';
+} from '../../controllers/userController.js';
 
 // Routes Communicate with User Controller to Handle Requests
 
@@ -16,7 +16,7 @@ import {
   getLeaderboard,
   getLeveledLeaderboard,
   createUserGoals
-} from '../controllers/userController.js';
+} from '../../controllers/userController.js';
 
 const router = express.Router();
 

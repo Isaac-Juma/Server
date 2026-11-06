@@ -1,6 +1,6 @@
-import User from '../models/User.js';
+import User from '../User.js';
 import Level from '../models/Level.js';
-import { connectDatabase, disconnectDatabase } from '../config/database.js';
+import { connectDatabase, disconnectDatabase } from '../../config/database.js';
 
 const seedDatabase = async () => {
   try {
